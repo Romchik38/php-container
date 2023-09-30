@@ -2,6 +2,7 @@
 
 /**
  * Main entry point to App
+ * @author Romchik38
  * @license MIT
  */
 
