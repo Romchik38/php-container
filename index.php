@@ -2,5 +2,6 @@
 
 /**
  * Main entry point to App
+ * @license MIT
  */
 
