@@ -6,3 +6,5 @@
  * @license MIT
  */
 
+use Romchik38\App;
+
