@@ -42,7 +42,10 @@ try {
     if ($exist === false) exit('Program must run via php-fpm server');
     $path = $_SERVER['REQUEST_URI'];
     $route = parseUrl($path);
-    if (strlen($route) === 0) send(404);
+    if (strlen($route) === 0) {
+        send(404);
+        exit();
+    }
     $app = new App($container);
     $response = $app->run([
         'route' => $route
