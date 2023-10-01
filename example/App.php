@@ -5,8 +5,6 @@ namespace Example;
 use Romchik38\Container;
 use Example\Router;
 
-use function PHPSTORM_META\type;
-
 class App
 {
     private Container $container;
