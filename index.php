@@ -1,12 +1,26 @@
 <?php
 
 /**
+ * Example to use with console
+ * 
+ * Php version 8.2
+ * 
+ * @category Psr-11
+ * 
+ * @package Container
+ * 
+ * @author Romchik38 <pomahehko.c@gmail.com>
+ * 
+ * @license MIT https://opensource.org/license/mit/
+ * 
+ * @link no link
+ * 
  * Usage
  * 
  * http://localhost:8000/one
  * must return 1
  * 
- * http://localhost:8000/some
+ * http://localhost:8000/some or /
  * must return 404 Not Found
  * 
  */
