@@ -9,10 +9,10 @@ git clone https://github.com/Romchik38/php-container.git
 composer install
 
 ## Structure
-src/                        implementation  
-example/                    example App using container  
-console.php                 run example App in console  
-index.php                   rum example App in browser  
+`src/`  implementation  
+`example/`  example App using container  
+`console.php`  run example App in console  
+`index.php`  rum example App in browser  
 
 ## Run example in console
 `php console.php one` must print "1"  
