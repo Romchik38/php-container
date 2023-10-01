@@ -15,14 +15,17 @@ console.php                 run example App in console
 index.php                   rum example App in browser  
 
 ## Run example in console
-php console.php one         should print "1"  
-php console.php some        should print "Not Found"  
+`php console.php one` should print "1"  
+`php console.php some` should print "Not Found"  
 
 ## Run example in browser
 1. Start http server  
 psr11_folder/php -S 0.0.0.0:8000  
 
 2. Make a request in address bar  
-localhost:8000/one          must return "1"  
-localhost:8000/             must return Not found  
-localhost:8000/some         must return Not found  
+must return "1"  
+localhost:8000/one  
+
+must return Not found  
+localhost:8000/         
+localhost:8000/some  
