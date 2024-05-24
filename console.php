@@ -23,6 +23,7 @@ declare(strict_types=1);
  * "php console.php some" must print "Not Fount"
  */
 
+require __DIR__ . '/vendor/autoload.php';
 $app = include __DIR__ . '/example/bootstrap.php';
 
 try {
