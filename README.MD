@@ -1,6 +1,6 @@
 # Simple implementation of psr-11 container
 
-1. See Description of a common interface for dependency injection containers   
+1. See Description of a common interface for dependency injection containers
 [PSR-11: Container interface](https://www.php-fig.org/psr/psr-11/)
 
 2. Clone this project  
