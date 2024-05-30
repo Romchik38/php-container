@@ -37,6 +37,13 @@ class Container implements ContainerInterface
             $errName = 'Container with id: "' . $id . '" was not found';
             throw new NotFoundException($errName);
         }
+
+        $entry = $this->__containers[$id];
+
+        if (is_callable($entry)) {
+            return $entry($this);
+        }
+
         return $this->__containers[$id];
     }
 
