@@ -25,6 +25,11 @@ class Container implements ContainerInterface
 {
     protected array $containers;
 
+    public function add(string $id, $value)
+    {
+        $this->containers[$id] = $value;
+    }
+
     public function get(string $id): mixed
     {
 
