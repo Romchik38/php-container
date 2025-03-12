@@ -20,14 +20,18 @@ use Psr\Container\ContainerInterface;
 
 /**
  * Implemetation of psr-11 container
+ * @throws ContainerExceptionInterface
  */
 class Container implements ContainerInterface
 {
     /** ready to use containers */
-    protected array $containers;
+    protected array $containers = [];
 
     /** Config data to create an object */
-    protected array $config;
+    protected array $config = [];
+
+    /** @var array<int, Promise> */
+    protected array $promised = [];
 
     /** 
      * Any primitive or object type to store in a container. 
@@ -40,6 +44,20 @@ class Container implements ContainerInterface
 
     public function get(string $id): mixed
     {
+        // promise ready check
+        if(count($this->promised) > 0) {
+            foreach($this->promised as $promise) {
+                $promisedClass = $promise->asString();
+                $checkPromise = $this->config[$promisedClass] ?? null;
+                if ($checkPromise === null) {
+                    throw new ContainerException(
+                        sprintf('Class %s was promised, but not configured', $promisedClass)
+                    );
+                }
+            }
+            $this->promised = [];
+        }
+
 
         $result = $this->has($id);
 
@@ -63,8 +81,15 @@ class Container implements ContainerInterface
     }
 
     /** store config about shared objects */
-    public function shared(string $className, ...$params): void
+    public function shared(ClassName $className, ...$params): void
     {
+        $this->config[$className()] = $params;
+    }
 
+    public function promise(ClassName $className): Promise
+    {
+        $promise = new Promise($className);
+        $this->promised[] = $promise;
+        return $promise;
     }
 }
