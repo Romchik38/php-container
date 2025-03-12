@@ -48,7 +48,7 @@ class Container implements ContainerInterface
         if(count($this->promised) > 0) {
             foreach($this->promised as $promise) {
                 $promisedClass = $promise->asString();
-                $checkPromise = $this->config[$promisedClass] ?? null;
+                $checkPromise = $this->containers[$promisedClass] ?? null;
                 if ($checkPromise === null) {
                     throw new ContainerException(
                         sprintf('Class %s was promised, but not configured', $promisedClass)
@@ -86,7 +86,12 @@ class Container implements ContainerInterface
         // do promise
         $this->promise($params);
         // create a shared
-        $this->config[$className()] = $params;
+        if(count($params) > 0) {
+            $this->containers[$className()] = new Shared($className, $params);
+        } else {
+            $this->containers[$className()] = new Shared($className);
+        }
+        
     }
 
     protected function promise($params): void
