@@ -89,7 +89,7 @@ class Container implements ContainerInterface
         if(count($params) > 0) {
             $this->containers[$className()] = new Shared($className, $params);
         } else {
-            $this->containers[$className()] = new Shared($className);
+            $this->containers[$className()] = new Shared($className, []);
         }
         
     }

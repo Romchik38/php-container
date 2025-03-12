@@ -7,17 +7,13 @@ use Psr\Container\ContainerInterface;
 /** @internal */
 class Shared
 {
-    /** @var array<int,mixed> $params */
-    protected readonly array $params;
-
     protected object|null $instance = null;
 
+    /** @param array<int,mixed> $params */
     public function __construct(
         protected readonly ClassName $className, 
-        ...$params
-        )
-    {
-        $this->params = $params;
+        protected readonly array $params
+    ) {
     }
 
     public function __invoke(ContainerInterface $container): object
