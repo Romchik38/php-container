@@ -1,0 +1,1 @@
+{"version":1,"defects":{"Test\\Unit\\ContainerTest::testAdd":8,"Test\\Unit\\ContainerTest::testGetString":8,"Test\\Unit\\ContainerTest::testGetCallable":8},"times":{"Test\\Unit\\ContainerTest::testAdd":0.01,"Test\\Unit\\ContainerTest::testGetString":0.001,"Test\\Unit\\ContainerTest::testGetCallable":0.001}}

@@ -25,6 +25,10 @@ class Container implements ContainerInterface
 {
     protected array $containers;
 
+    /** 
+     * Any primitive or object type to store in a container. 
+     * The given value will not be proccessed by container and will be returned as is 
+     * */
     public function add(string $id, $value)
     {
         $this->containers[$id] = $value;
