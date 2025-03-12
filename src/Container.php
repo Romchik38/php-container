@@ -23,7 +23,11 @@ use Psr\Container\ContainerInterface;
  */
 class Container implements ContainerInterface
 {
+    /** ready to use containers */
     protected array $containers;
+
+    /** Config data to create an object */
+    protected array $config;
 
     /** 
      * Any primitive or object type to store in a container. 
@@ -56,5 +60,11 @@ class Container implements ContainerInterface
     public function has(string $id): bool
     {
         return array_key_exists($id, $this->containers);
+    }
+
+    /** store config about shared objects */
+    public function shared(string $className, ...$params): void
+    {
+
     }
 }
