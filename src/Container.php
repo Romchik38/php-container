@@ -83,13 +83,18 @@ class Container implements ContainerInterface
     /** store config about shared objects */
     public function shared(ClassName $className, ...$params): void
     {
+        // do promise
+        $this->promise($params);
+        // create a shared
         $this->config[$className()] = $params;
     }
 
-    public function promise(ClassName $className): Promise
+    protected function promise($params): void
     {
-        $promise = new Promise($className);
-        $this->promised[] = $promise;
-        return $promise;
+        foreach($params as $param) {
+            if ($param instanceof Promise) {
+                $this->promised[] = $param;
+            }
+        }
     }
 }

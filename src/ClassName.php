@@ -6,7 +6,6 @@ namespace Romchik38\Container;
 
 use InvalidArgumentException;
 
-/** @internal */
 final class ClassName
 {
     public readonly string $className;
