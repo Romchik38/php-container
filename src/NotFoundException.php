@@ -1,6 +1,6 @@
 <?php
 
-namespace Romchik38;
+namespace Romchik38\Container;
 
 use Psr\Container\NotFoundExceptionInterface;
 

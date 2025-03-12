@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php 
+
+declare(strict_types=1);
 
 /**
  * Implemetation of psr-11 container
  * 
- * Php version 8.2
+ * Php version 8.3
  * 
  * @category Psr-11
  * @package  Container
@@ -12,22 +14,17 @@
  * @link     no link
  */
 
-namespace Romchik38;
+namespace Romchik38\Container;
 
 use Psr\Container\ContainerInterface;
-use Romchik38\NotFoundException;
 
 /**
  * Implemetation of psr-11 container
  */
 class Container implements ContainerInterface
 {
-    private $__containers = [];
+    protected array $containers;
 
-    public function add(string $id, $value)
-    {
-        $this->__containers[$id] = $value;
-    }
     public function get(string $id): mixed
     {
 
@@ -38,17 +35,17 @@ class Container implements ContainerInterface
             throw new NotFoundException($errName);
         }
 
-        $entry = $this->__containers[$id];
+        $entry = $this->containers[$id];
 
         if (is_callable($entry)) {
             return $entry($this);
         }
 
-        return $this->__containers[$id];
+        return $this->containers[$id];
     }
 
     public function has(string $id): bool
     {
-        return array_key_exists($id, $this->__containers);
+        return array_key_exists($id, $this->containers);
     }
 }

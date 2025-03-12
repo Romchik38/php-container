@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit;
 
 use PHPUnit\Framework\TestCase;
-use Romchik38\Container;
+use Romchik38\Container\Container;
 
 class ContainerTest extends TestCase
 {
