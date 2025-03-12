@@ -37,4 +37,9 @@ class Shared
         $this->instance = new $classNameAsString(...$newParams);
         return $this->instance;
     }
+    
+    public function params(): array
+    {
+        return $this->params;
+    }
 }

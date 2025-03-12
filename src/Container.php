@@ -83,8 +83,17 @@ class Container implements ContainerInterface
     /** store config about shared objects */
     public function shared(ClassName $className, ...$params): void
     {
-        // do promise
-        $this->promise($params);
+        // check on re-add
+        $isAdded = $this->containers[$className()] ?? null;
+        if($isAdded !== null) {
+            throw new ContainerException(
+                sprintf('%s was already added', $className())
+            );
+        }
+
+        // check cercular and do promise
+        $this->promise($className, $params);
+
         // create a shared
         if(count($params) > 0) {
             $this->containers[$className()] = new Shared($className, $params);
@@ -94,12 +103,50 @@ class Container implements ContainerInterface
         
     }
 
-    protected function promise($params): void
+    protected function promise(ClassName $className, $params): void
     {
+        $list = [];
         foreach($params as $param) {
             if ($param instanceof Promise) {
                 $this->promised[] = $param;
+                $result = $this->checkDependency(
+                    $className(), 
+                    $param->asString(), 
+                    $list
+                );
+                array_merge($list, $result);
             }
         }
+    }
+
+    protected function checkDependency(
+        string $target, 
+        string $candidate, 
+        array $checked
+    ): array
+    {
+        if ($target === $candidate) {
+            throw new ContainerException(sprintf(
+                'cercular found: %s checked: %s',
+                $target,
+                implode(', ', $checked)
+            ));
+        }
+    
+        /** @var Shared $candidateInstance */
+        $candidateInstance = $this->containers[$candidate] ?? null;
+        if ($candidateInstance === null) {
+            return $checked;
+        }
+    
+        $checked[] = $candidate;
+    
+        foreach($candidateInstance->params() as $candidateDep) {
+            if ($candidateDep instanceof Promise) {
+                $checked = $this->checkDependency($target, $candidateDep->asString(), $checked);
+            }
+        }
+    
+        return $checked;
     }
 }
