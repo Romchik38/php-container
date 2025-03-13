@@ -6,7 +6,7 @@ namespace Romchik38\Container;
 
 final class Promise
 {
-    public readonly Key $key;
+    private readonly Key $key;
 
     public function __construct(
         string $key
