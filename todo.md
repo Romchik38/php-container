@@ -1,9 +1,7 @@
 # Todo
 
-Let's write some code!
-
-- create an interface
-- implement `Promise`
-
+- tests
 - phpstan
 - code standart
+- readme
+- documentation
