@@ -42,7 +42,7 @@ class Container implements ContainerInterface
      * Any primitive or object type to store in a container. 
      * The given value will not be proccessed by container and will be returned as is 
      * */
-    public function add(string $id, int|float|string|array $value): void
+    public function add(string $id, mixed $value): void
     {
         $this->containers[$id] = new Primitive(new Key($id), $value);
     }

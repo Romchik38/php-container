@@ -10,11 +10,11 @@ class Primitive implements EntryInterface
 {
     public function __construct(
         protected readonly Key $key,
-        protected readonly int|float|string|array $value
+        protected readonly mixed $value
     ) {   
     }
 
-    public function __invoke(ContainerInterface $container): int|float|string|array
+    public function __invoke(ContainerInterface $container): mixed
     {
         return $this->value;
     }
