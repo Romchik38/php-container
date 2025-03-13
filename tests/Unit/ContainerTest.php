@@ -2,10 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit;
+namespace Romchik38\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use Romchik38\Container\ClassName;
 use Romchik38\Container\Container;
+
+use Romchik38\Tests\Unit\Classes\Primitive1;
 
 class ContainerTest extends TestCase
 {
@@ -42,5 +45,23 @@ class ContainerTest extends TestCase
         
         $result = $container->get('callback');
         $this->assertSame($id, $result($id));
+    }
+
+    public function testShared(): void
+    {
+        $container = new Container();
+
+        $container->shared(new ClassName(Primitive1::class), 7);
+        
+        $sh1 = $container->get(Primitive1::class);
+        $sh2 = $container->get(Primitive1::class);
+
+        $this->assertSame($sh1, $sh2);
+        $this->assertSame($sh1->numb, $sh1->numb);
+    }
+
+    public function testFresh(): void
+    {
+        
     }
 }
