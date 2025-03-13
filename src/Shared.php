@@ -5,7 +5,7 @@ namespace Romchik38\Container;
 use Psr\Container\ContainerInterface;
 
 /** @internal */
-class Shared
+class Shared implements EntryInterface
 {
     protected object|null $instance = null;
 
@@ -26,7 +26,7 @@ class Shared
 
         foreach($this->params as $param) {
             if ($param instanceof Promise) {
-                $promised = $container->get($param->asString());
+                $promised = $container->get($param->key);
                 $newParams[] = $promised;
             } else {
                 $newParams[] = $param;

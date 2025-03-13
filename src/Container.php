@@ -24,20 +24,25 @@ use Psr\Container\ContainerInterface;
  */
 class Container implements ContainerInterface
 {
-    /** ready to use containers */
+    /** 
+     * Ready to use containers 
+     * 
+     * @var array<string,EntryInterface>
+     * */
     protected array $containers = [];
 
-    /** Config data to create an object */
-    protected array $config = [];
-
-    /** @var array<int, Promise> */
+    /** 
+     * Promised entries
+     * 
+     * @var array<int, Promise> 
+     * */
     protected array $promised = [];
 
     /** 
      * Any primitive or object type to store in a container. 
      * The given value will not be proccessed by container and will be returned as is 
      * */
-    public function add(string $id, $value)
+    public function add(string $id, mixed $value): void
     {
         $this->containers[$id] = $value;
     }
@@ -47,7 +52,7 @@ class Container implements ContainerInterface
         // promise ready check
         if(count($this->promised) > 0) {
             foreach($this->promised as $promise) {
-                $promisedClass = $promise->asString();
+                $promisedClass = $promise->key;
                 $checkPromise = $this->containers[$promisedClass] ?? null;
                 if ($checkPromise === null) {
                     throw new ContainerException(
@@ -68,11 +73,7 @@ class Container implements ContainerInterface
 
         $entry = $this->containers[$id];
 
-        if (is_callable($entry)) {
-            return $entry($this);
-        }
-
-        return $this->containers[$id];
+        return $entry($this);
     }
 
     public function has(string $id): bool
@@ -111,7 +112,7 @@ class Container implements ContainerInterface
                 $this->promised[] = $param;
                 $result = $this->checkDependency(
                     $className(), 
-                    $param->asString(), 
+                    $param->key, 
                     $list
                 );
                 array_merge($list, $result);
@@ -133,7 +134,6 @@ class Container implements ContainerInterface
             ));
         }
     
-        /** @var Shared $candidateInstance */
         $candidateInstance = $this->containers[$candidate] ?? null;
         if ($candidateInstance === null) {
             return $checked;
@@ -143,7 +143,7 @@ class Container implements ContainerInterface
     
         foreach($candidateInstance->params() as $candidateDep) {
             if ($candidateDep instanceof Promise) {
-                $checked = $this->checkDependency($target, $candidateDep->asString(), $checked);
+                $checked = $this->checkDependency($target, $candidateDep->key, $checked);
             }
         }
     
