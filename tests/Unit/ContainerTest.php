@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Romchik38\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use Romchik38\Container\ClassName;
 use Romchik38\Container\Container;
 use Romchik38\Container\Key;
 use Romchik38\Container\Promise;
@@ -49,11 +48,12 @@ class ContainerTest extends TestCase
         $this->assertSame($id, $result($id));
     }
 
+    /** SHARED */
     public function testShared(): void
     {
         $container = new Container();
 
-        $container->shared(Primitive1::class, 7);
+        $container->shared(Primitive1::class, [7]);
         
         $sh1 = $container->get(Primitive1::class);
         $sh2 = $container->get(Primitive1::class);
@@ -62,11 +62,12 @@ class ContainerTest extends TestCase
         $this->assertSame($sh1->numb, $sh1->numb);
     }
 
+    /** FRESH */
     public function testFresh(): void
     {
         $container = new Container();
 
-        $container->fresh(Primitive1::class, 7);
+        $container->fresh(Primitive1::class, [7]);
         
         $sh1 = $container->get(Primitive1::class);
         $sh2 = $container->get(Primitive1::class);
@@ -74,7 +75,8 @@ class ContainerTest extends TestCase
         $this->assertNotSame($sh1, $sh2);
         $this->assertSame($sh1->numb, $sh1->numb);
     }
-    
+ 
+    /** MULTI */
     public function testMultiPrimitive(): void
     {
         $container = new Container();
@@ -82,13 +84,15 @@ class ContainerTest extends TestCase
         $container->multi(
             Primitive1::class,
             new Key('one'),
-            1
+            true,
+            [1]
         );
         
         $container->multi(
             Primitive1::class,
             new Key('seven'),
-            7
+            true,
+            [7]
         );
         
         $mOne = $container->get('one');
@@ -106,20 +110,26 @@ class ContainerTest extends TestCase
         $container->multi(
             OnOtherClass2::class,
             new Key('first'),
-            'some_string_for_first',
-            new Promise(Primitive1::class)
+            true,
+            [
+                'some_string_for_first',
+                new Promise(Primitive1::class)
+            ]
             
         );
         
         $container->multi(
             OnOtherClass2::class,
             new Key('seconds'),
-            'another_string_for_second',
-            new Promise(Primitive1::class)
+            true,
+            [
+                'another_string_for_second',
+                new Promise(Primitive1::class)
+            ]
             
         );
 
-        $container->fresh(Primitive1::class, 7);
+        $container->fresh(Primitive1::class, [7]);
         
         $mFirst = $container->get('first');
         $mSecond = $container->get('seconds');

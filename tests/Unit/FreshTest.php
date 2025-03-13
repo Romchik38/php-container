@@ -38,7 +38,7 @@ final class FreshTest extends TestCase
             
         );
 
-        $container->shared('\Romchik38\Tests\Unit\Classes\Primitive1', 1);
+        $container->shared('\Romchik38\Tests\Unit\Classes\Primitive1', [1]);
 
         $instance = $fr->__invoke($container);
         $this->assertSame('some_string', $instance->str);

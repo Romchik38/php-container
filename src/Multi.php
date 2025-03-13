@@ -10,13 +10,13 @@ class Multi extends AbstractEntry
         ClassName $className, 
         array $params,
         protected readonly Key $key,
-        bool $isShared = true
+        bool $isShared
     ) {
         parent::__construct($className, $params, $isShared);
     }
 
     public function key(): string
     {
-        return $this->key();
+        return ($this->key)();
     }
 }

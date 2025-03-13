@@ -83,7 +83,7 @@ class Container implements ContainerInterface
     /** 
      * Creates a shared object of provided ClassName 
      * */
-    public function shared(string $className, ...$params): void
+    public function shared(string $className, array $params = []): void
     {
         $classNameVo = new ClassName($className);
         // check on re-add
@@ -93,17 +93,13 @@ class Container implements ContainerInterface
         $this->promise($classNameVo, $params);
 
         // create an instance
-        if(count($params) > 0) {
-            $this->containers[$className] = new Shared($classNameVo, $params);
-        } else {
-            $this->containers[$className] = new Shared($classNameVo, []);
-        }
+        $this->containers[$className] = new Shared($classNameVo, $params);
     }
 
     /** 
      * Creates a new copy of provided ClassName
      */
-    public function fresh(string $className, ...$params): void
+    public function fresh(string $className, array $params = []): void
     {
         $classNameVo = new ClassName($className);
         // check on re-add
@@ -113,11 +109,7 @@ class Container implements ContainerInterface
         $this->promise($classNameVo, $params);
 
         // create an instance
-        if(count($params) > 0) {
-            $this->containers[$className] = new Fresh($classNameVo, $params);
-        } else {
-            $this->containers[$className] = new Fresh($classNameVo, []);
-        }
+        $this->containers[$className] = new Fresh($classNameVo, $params);
     }
 
     /**
@@ -126,7 +118,8 @@ class Container implements ContainerInterface
     public function multi(
         string $className,
         Key $key,
-        ...$params
+        bool $isShared = true,
+        array $params = []
     ): void {
         $classNameVo = new ClassName($className);
         // check on re-add
@@ -136,11 +129,7 @@ class Container implements ContainerInterface
         $this->promise($classNameVo, $params);
 
         // create an instance
-        if(count($params) > 0) {
-            $this->containers[$key()] = new Multi($classNameVo, $params, $key);
-        } else {
-            $this->containers[$key()] = new Multi($classNameVo, [], $key);
-        }
+        $this->containers[$key()] = new Multi($classNameVo, $params, $key, $isShared);
     }
 
     /** @throws ContainerException */
