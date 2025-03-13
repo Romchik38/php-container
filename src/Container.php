@@ -51,7 +51,7 @@ class Container implements ContainerInterface
         // promise ready check
         if(count($this->promised) > 0) {
             foreach($this->promised as $promise) {
-                $promisedClass = $promise->key;
+                $promisedClass = $promise->keyAsString();
                 $checkPromise = $this->containers[$promisedClass] ?? null;
                 if ($checkPromise === null) {
                     throw new ContainerException(
