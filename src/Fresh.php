@@ -8,7 +8,7 @@ use Psr\Container\ContainerInterface;
 
 class Fresh extends Shared
 {
-    public function __invoke(ContainerInterface $container): mixed
+    public function __invoke(ContainerInterface $container): object
     {
         $newParams = [];
 
