@@ -60,8 +60,16 @@ class ContainerTest extends TestCase
         $this->assertSame($sh1->numb, $sh1->numb);
     }
 
-    // public function testFresh(): void
-    // {
+    public function testFresh(): void
+    {
+        $container = new Container();
+
+        $container->fresh(new ClassName(Primitive1::class), 7);
         
-    // }
+        $sh1 = $container->get(Primitive1::class);
+        $sh2 = $container->get(Primitive1::class);
+
+        $this->assertNotSame($sh1, $sh2);
+        $this->assertSame($sh1->numb, $sh1->numb);
+    }
 }
