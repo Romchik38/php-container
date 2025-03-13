@@ -90,7 +90,7 @@ class Container implements ContainerInterface
         // check cercular and do promise
         $this->promise($className, $params);
 
-        // create a shared
+        // create an instance
         if(count($params) > 0) {
             $this->containers[$className()] = new Shared($className, $params);
         } else {
@@ -106,11 +106,31 @@ class Container implements ContainerInterface
         // check cercular and do promise
         $this->promise($className, $params);
 
-        // create a shared
+        // create an instance
         if(count($params) > 0) {
             $this->containers[$className()] = new Fresh($className, $params);
         } else {
             $this->containers[$className()] = new Fresh($className, []);
+        }
+    }
+
+    public function multi(
+        ClassName $className,
+        Key $key,
+        ...$params
+    ): void
+    {
+        // check on re-add
+        $this->chechReAdd($key());
+
+        // check cercular and do promise
+        $this->promise($key, $params);
+
+        // create an instance
+        if(count($params) > 0) {
+            $this->containers[$key()] = new Multi($className, $params, $key);
+        } else {
+            $this->containers[$key()] = new Multi($className, [], $key);
         }
     }
 
@@ -125,14 +145,14 @@ class Container implements ContainerInterface
         }
     }
 
-    protected function promise(ClassName $className, $params): void
+    protected function promise(callable $key, $params): void
     {
         $list = [];
         foreach($params as $param) {
             if ($param instanceof Promise) {
                 $this->promised[] = $param;
                 $result = $this->checkDependency(
-                    $className(), 
+                    $key(), 
                     $param->keyAsString(), 
                     $list
                 );
