@@ -39,14 +39,14 @@ class Container implements ContainerInterface
     protected array $promised = [];
 
     /** 
-     * Add a mixed value as is into the container. 
+     * Adds a mixed value "as is" into the container. 
      * */
-    public function add(string $id, mixed $value): void
+    public function add(string $key, mixed $value): void
     {
-        $this->containers[$id] = new Primitive(new Key($id), $value);
+        $this->containers[$key] = new Primitive(new Key($key), $value);
     }
 
-    public function get(string $id): mixed
+    public function get(string $key): mixed
     {
         // promise ready check
         if(count($this->promised) > 0) {
@@ -63,21 +63,21 @@ class Container implements ContainerInterface
         }
 
 
-        $result = $this->has($id);
+        $result = $this->has($key);
 
         if ($result === false) {
-            $errName = 'Container with id: "' . $id . '" was not found';
+            $errName = sprintf('Container with key: %s was not found', $key);
             throw new NotFoundException($errName);
         }
 
-        $entry = $this->containers[$id];
+        $entry = $this->containers[$key];
 
         return $entry($this);
     }
 
-    public function has(string $id): bool
+    public function has(string $key): bool
     {
-        return array_key_exists($id, $this->containers);
+        return array_key_exists($key, $this->containers);
     }
 
     /** 
@@ -121,7 +121,7 @@ class Container implements ContainerInterface
     }
 
     /**
-     * Creates a shared instance by provided Key
+     * Creates a shared instance by provided Key (not class name)
      */
     public function multi(
         string $className,
@@ -154,6 +154,7 @@ class Container implements ContainerInterface
         }
     }
 
+    /** Notices a dependency to check in future before `get` call */
     protected function promise(callable $key, $params): void
     {
         $list = [];
@@ -170,6 +171,7 @@ class Container implements ContainerInterface
         }
     }
 
+    /** Cercular check */
     protected function checkDependency(
         string $target, 
         string $candidate, 
