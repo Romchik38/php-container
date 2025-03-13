@@ -39,8 +39,7 @@ class Container implements ContainerInterface
     protected array $promised = [];
 
     /** 
-     * Any primitive or object type to store in a container. 
-     * The given value will not be proccessed by container and will be returned as is 
+     * Add a mixed value as is into the container. 
      * */
     public function add(string $id, mixed $value): void
     {
@@ -81,7 +80,9 @@ class Container implements ContainerInterface
         return array_key_exists($id, $this->containers);
     }
 
-    /** store shared objects config */
+    /** 
+     * Creates a shared object of provided ClassName 
+     * */
     public function shared(ClassName $className, ...$params): void
     {
         // check on re-add
@@ -98,6 +99,9 @@ class Container implements ContainerInterface
         }
     }
 
+    /** 
+     * Creates a new copy of provided ClassName
+     */
     public function fresh(ClassName $className, ...$params): void
     {
         // check on re-add
@@ -114,12 +118,14 @@ class Container implements ContainerInterface
         }
     }
 
+    /**
+     * Creates a shared instance by provided Key
+     */
     public function multi(
         ClassName $className,
         Key $key,
         ...$params
-    ): void
-    {
+    ): void {
         // check on re-add
         $this->chechReAdd($key());
 
@@ -165,8 +171,7 @@ class Container implements ContainerInterface
         string $target, 
         string $candidate, 
         array $checked
-    ): array
-    {
+    ): array {
         if ($target === $candidate) {
             throw new ContainerException(sprintf(
                 'cercular found: %s checked: %s',
