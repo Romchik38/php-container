@@ -4,15 +4,23 @@ declare(strict_types=1);
 
 namespace Romchik38\Container;
 
-use InvalidArgumentException;
-
 final class Promise
 {
+    public readonly Key $key;
+
     public function __construct(
-        public readonly string $key
+        string $key
     ) {
-        if ($key === '') {
-            throw new InvalidArgumentException('key is empty');
-        }
+        $this->key = new Key($key);
+    }
+
+    public function key(): Key
+    {
+        return $this->key;
+    }
+
+    public function keyAsString(): string
+    {
+        return ($this->key())();
     }
 }

@@ -42,9 +42,9 @@ class Container implements ContainerInterface
      * Any primitive or object type to store in a container. 
      * The given value will not be proccessed by container and will be returned as is 
      * */
-    public function add(string $id, mixed $value): void
+    public function add(string $id, int|float|string|array $value): void
     {
-        $this->containers[$id] = $value;
+        $this->containers[$id] = new Primitive(new Key($id), $value);
     }
 
     public function get(string $id): mixed
@@ -112,7 +112,7 @@ class Container implements ContainerInterface
                 $this->promised[] = $param;
                 $result = $this->checkDependency(
                     $className(), 
-                    $param->key, 
+                    $param->keyAsString(), 
                     $list
                 );
                 array_merge($list, $result);
@@ -143,7 +143,7 @@ class Container implements ContainerInterface
     
         foreach($candidateInstance->params() as $candidateDep) {
             if ($candidateDep instanceof Promise) {
-                $checked = $this->checkDependency($target, $candidateDep->key, $checked);
+                $checked = $this->checkDependency($target, $candidateDep->keyAsString(), $checked);
             }
         }
     

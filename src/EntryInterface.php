@@ -6,7 +6,9 @@ use Psr\Container\ContainerInterface;
 
 interface EntryInterface
 {
-    public function __invoke(ContainerInterface $container): object;
+    public function __invoke(ContainerInterface $container): mixed;
 
     public function params(): array;
+
+    public function key(): string;
 }

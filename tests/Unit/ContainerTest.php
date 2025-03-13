@@ -29,19 +29,19 @@ class ContainerTest extends TestCase
         $this->assertSame($value, $container->get($id));
     }
 
-    public function testGetCallable()
-    {
-        $id = 'some id';
-        $value = 'some value';
+    // public function testGetCallable()
+    // {
+    //     $id = 'some id';
+    //     $value = 'some value';
 
-        $fn1 = function($container) {
-            return $container->get('some id');
-        };
+    //     $fn1 = function($container) {
+    //         return $container->get('some id');
+    //     };
 
-        $container = new Container();
-        $container->add($id, $value);
-        $container->add('callback', $fn1);
+    //     $container = new Container();
+    //     $container->add($id, $value);
+    //     $container->add('callback', $fn1);
         
-        $this->assertSame($value, $container->get('callback'));
-    }
+    //     $this->assertSame($value, $container->get('callback'));
+    // }
 }

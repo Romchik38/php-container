@@ -26,7 +26,7 @@ class Shared implements EntryInterface
 
         foreach($this->params as $param) {
             if ($param instanceof Promise) {
-                $promised = $container->get($param->key);
+                $promised = $container->get($param->keyAsString());
                 $newParams[] = $promised;
             } else {
                 $newParams[] = $param;
@@ -41,5 +41,10 @@ class Shared implements EntryInterface
     public function params(): array
     {
         return $this->params;
+    }
+
+    public function key(): string
+    {
+        return ($this->className)();
     }
 }
