@@ -81,16 +81,11 @@ class Container implements ContainerInterface
         return array_key_exists($id, $this->containers);
     }
 
-    /** store config about shared objects */
+    /** store shared objects config */
     public function shared(ClassName $className, ...$params): void
     {
         // check on re-add
-        $isAdded = $this->containers[$className()] ?? null;
-        if($isAdded !== null) {
-            throw new ContainerException(
-                sprintf('%s was already added', $className())
-            );
-        }
+        $this->chechReAdd($className());
 
         // check cercular and do promise
         $this->promise($className, $params);
@@ -101,7 +96,33 @@ class Container implements ContainerInterface
         } else {
             $this->containers[$className()] = new Shared($className, []);
         }
-        
+    }
+
+    public function fresh(ClassName $className, ...$params): void
+    {
+        // check on re-add
+        $this->chechReAdd($className());
+
+        // check cercular and do promise
+        $this->promise($className, $params);
+
+        // create a shared
+        if(count($params) > 0) {
+            $this->containers[$className()] = new Fresh($className, $params);
+        } else {
+            $this->containers[$className()] = new Fresh($className, []);
+        }
+    }
+
+    /** @throws ContainerException */
+    protected function chechReAdd(string $key): void
+    {
+        $isAdded = $this->containers[$key] ?? null;
+        if($isAdded !== null) {
+            throw new ContainerException(
+                sprintf('Container key %s was already added', $key)
+            );
+        }
     }
 
     protected function promise(ClassName $className, $params): void
