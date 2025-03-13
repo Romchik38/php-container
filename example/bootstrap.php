@@ -6,10 +6,10 @@ include 'Db.php';
 include 'App.php';
 include 'Router.php';
 
-use Romchik38\Container;
 use Example\Db;
 use Example\Router;
 use Example\App;
+use Romchik38\Container\Container;
 
 $dataDb = ['one' => '1', 'two' => '2', 'hello' => 'world'];
 

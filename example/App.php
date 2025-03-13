@@ -2,8 +2,8 @@
 
 namespace Example;
 
-use Romchik38\Container;
 use Example\Router;
+use Romchik38\Container\Container;
 
 class App
 {
