@@ -25,6 +25,6 @@ class Primitive implements EntryInterface
 
     public function key(): string
     {
-        return $this->key();
+        return ($this->key)();
     }
 }

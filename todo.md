@@ -1,8 +1,6 @@
 # Todo
 
 - tests
-  - multi
-  - primitive
   - shared
   - container
 - phpstan
