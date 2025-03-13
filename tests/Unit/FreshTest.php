@@ -14,16 +14,6 @@ use Romchik38\Tests\Unit\Classes\NoDep1;
 
 final class FreshTest extends TestCase
 {
-    public function testInstanseOfShared(): void
-    {
-        $fr = new Fresh(
-            new ClassName(NoDep1::class),
-            []
-        );
-
-        $this->assertSame(true, $fr instanceof Shared);
-    }
-
     public function testInvoke(): void
     {
         $container = new Container();

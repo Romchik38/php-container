@@ -3,15 +3,16 @@
 namespace Romchik38\Container;
 
 /** @internal */
-class Multi extends Shared
+class Multi extends AbstractEntry
 {
     /** @param array<int,mixed> $params */
     public function __construct(
         ClassName $className, 
         array $params,
-        protected readonly Key $key
+        protected readonly Key $key,
+        bool $isShared = true
     ) {
-        parent::__construct($className, $params);
+        parent::__construct($className, $params, $isShared);
     }
 
     public function key(): string

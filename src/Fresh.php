@@ -4,24 +4,18 @@ declare(strict_types=1);
 
 namespace Romchik38\Container;
 
-use Psr\Container\ContainerInterface;
-
-class Fresh extends Shared
+class Fresh extends AbstractEntry
 {
-    public function __invoke(ContainerInterface $container): object
+    /** @param array<int,mixed> $params */
+    public function __construct(
+        ClassName $className, 
+        array $params
+    ) {
+        parent::__construct($className, $params, false);
+    }
+
+    public function key(): string
     {
-        $newParams = [];
-
-        foreach($this->params as $param) {
-            if ($param instanceof Promise) {
-                $promised = $container->get($param->keyAsString());
-                $newParams[] = $promised;
-            } else {
-                $newParams[] = $param;
-            }
-        }
-
-        $classNameAsString = ($this->className)();
-        return new $classNameAsString(...$newParams);
+        return ($this->className)();
     }
 }
