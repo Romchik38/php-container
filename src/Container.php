@@ -83,38 +83,40 @@ class Container implements ContainerInterface
     /** 
      * Creates a shared object of provided ClassName 
      * */
-    public function shared(ClassName $className, ...$params): void
+    public function shared(string $className, ...$params): void
     {
+        $classNameVo = new ClassName($className);
         // check on re-add
-        $this->chechReAdd($className());
+        $this->chechReAdd($classNameVo());
 
         // check cercular and do promise
-        $this->promise($className, $params);
+        $this->promise($classNameVo, $params);
 
         // create an instance
         if(count($params) > 0) {
-            $this->containers[$className()] = new Shared($className, $params);
+            $this->containers[$className] = new Shared($classNameVo, $params);
         } else {
-            $this->containers[$className()] = new Shared($className, []);
+            $this->containers[$className] = new Shared($classNameVo, []);
         }
     }
 
     /** 
      * Creates a new copy of provided ClassName
      */
-    public function fresh(ClassName $className, ...$params): void
+    public function fresh(string $className, ...$params): void
     {
+        $classNameVo = new ClassName($className);
         // check on re-add
-        $this->chechReAdd($className());
+        $this->chechReAdd($classNameVo());
 
         // check cercular and do promise
-        $this->promise($className, $params);
+        $this->promise($classNameVo, $params);
 
         // create an instance
         if(count($params) > 0) {
-            $this->containers[$className()] = new Fresh($className, $params);
+            $this->containers[$className] = new Fresh($classNameVo, $params);
         } else {
-            $this->containers[$className()] = new Fresh($className, []);
+            $this->containers[$className] = new Fresh($classNameVo, []);
         }
     }
 
@@ -122,21 +124,22 @@ class Container implements ContainerInterface
      * Creates a shared instance by provided Key
      */
     public function multi(
-        ClassName $className,
+        string $className,
         Key $key,
         ...$params
     ): void {
+        $classNameVo = new ClassName($className);
         // check on re-add
         $this->chechReAdd($key());
 
         // check cercular and do promise
-        $this->promise($key, $params);
+        $this->promise($classNameVo, $params);
 
         // create an instance
         if(count($params) > 0) {
-            $this->containers[$key()] = new Multi($className, $params, $key);
+            $this->containers[$key()] = new Multi($classNameVo, $params, $key);
         } else {
-            $this->containers[$key()] = new Multi($className, [], $key);
+            $this->containers[$key()] = new Multi($classNameVo, [], $key);
         }
     }
 

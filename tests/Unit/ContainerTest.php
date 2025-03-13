@@ -53,7 +53,7 @@ class ContainerTest extends TestCase
     {
         $container = new Container();
 
-        $container->shared(new ClassName(Primitive1::class), 7);
+        $container->shared(Primitive1::class, 7);
         
         $sh1 = $container->get(Primitive1::class);
         $sh2 = $container->get(Primitive1::class);
@@ -66,7 +66,7 @@ class ContainerTest extends TestCase
     {
         $container = new Container();
 
-        $container->fresh(new ClassName(Primitive1::class), 7);
+        $container->fresh(Primitive1::class, 7);
         
         $sh1 = $container->get(Primitive1::class);
         $sh2 = $container->get(Primitive1::class);
@@ -80,13 +80,13 @@ class ContainerTest extends TestCase
         $container = new Container();
 
         $container->multi(
-            new ClassName(Primitive1::class),
+            Primitive1::class,
             new Key('one'),
             1
         );
         
         $container->multi(
-            new ClassName(Primitive1::class),
+            Primitive1::class,
             new Key('seven'),
             7
         );
@@ -104,7 +104,7 @@ class ContainerTest extends TestCase
         $container = new Container();
 
         $container->multi(
-            new ClassName(OnOtherClass2::class),
+            OnOtherClass2::class,
             new Key('first'),
             'some_string_for_first',
             new Promise(Primitive1::class)
@@ -112,14 +112,14 @@ class ContainerTest extends TestCase
         );
         
         $container->multi(
-            new ClassName(OnOtherClass2::class),
+            OnOtherClass2::class,
             new Key('seconds'),
             'another_string_for_second',
             new Promise(Primitive1::class)
             
         );
 
-        $container->fresh(new ClassName(Primitive1::class), 7);
+        $container->fresh(Primitive1::class, 7);
         
         $mFirst = $container->get('first');
         $mSecond = $container->get('seconds');
