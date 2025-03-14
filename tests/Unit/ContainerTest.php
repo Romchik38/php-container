@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace Romchik38\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Container\NotFoundExceptionInterface;
 use Romchik38\Container\Container;
+use Romchik38\Container\ContainerException;
 use Romchik38\Container\Key;
+use Romchik38\Container\NotFoundException;
 use Romchik38\Container\Promise;
 use Romchik38\Tests\Unit\Classes\Primitive1;
 use Romchik38\Tests\Unit\Classes\OnOtherClass2;
 
 class ContainerTest extends TestCase
 {
+    /** ADD */
     public function testAdd()
     {
         $id = 'some id';
@@ -23,6 +27,7 @@ class ContainerTest extends TestCase
         $this->assertSame($value, $container->get($id));
     }
 
+    /** GET */
     public function testGetString()
     {
         $id = 'some id';
@@ -46,6 +51,28 @@ class ContainerTest extends TestCase
         
         $result = $container->get('callback');
         $this->assertSame($id, $result($id));
+    }
+
+    public function testGetWaspromisedButDidNotAdded(): void
+    {
+        $container = new Container();
+        $container->shared(
+            '\Romchik38\Tests\Unit\Classes\OnOtherClass2',
+            [
+                'some_str',
+                new Promise('numb.one')
+            ]
+        );
+
+        $this->expectException(ContainerException::class);
+        $container->get('\Romchik38\Tests\Unit\Classes\OnOtherClass2');
+    }
+
+    public function testGetNotFound(): void
+    {
+        $container = new Container();
+        $this->expectException(NotFoundExceptionInterface::class);
+        $container->get('\Romchik38\Tests\Unit\Classes\OnOtherClass2');
     }
 
     /** SHARED */

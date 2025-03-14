@@ -17,6 +17,9 @@ declare(strict_types=1);
 namespace Romchik38\Container;
 
 use Psr\Container\ContainerInterface;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
+
 
 /**
  * Implemetation of psr-11 container
@@ -46,6 +49,10 @@ class Container implements ContainerInterface
         $this->containers[$key] = new Primitive(new Key($key), $value);
     }
 
+    /** 
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     */
     public function get(string $key): mixed
     {
         // promise ready check
