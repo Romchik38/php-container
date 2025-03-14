@@ -11,6 +11,7 @@ interface EntryInterface
 {
     public function __invoke(ContainerInterface $container): mixed;
 
+    /** @return array<int,mixed> */
     public function params(): array;
 
     public function key(): string;

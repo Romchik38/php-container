@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Implemetation of psr-11 container
  *
@@ -9,6 +7,8 @@ declare(strict_types=1);
  *
  * @link     no link
  */
+
+declare(strict_types=1);
 
 namespace Romchik38\Container;
 
@@ -91,7 +91,9 @@ class Container implements ContainerInterface
     /**
      * Creates a shared object of provided ClassName
      *
+     * @param array<int,mixed> $params
      * @throws ContainerExceptionInterface - On re-add.
+     * @throws ContainerExceptionInterface - On cercular dependency.
      * */
     public function shared(string $className, array $params = []): void
     {
@@ -108,6 +110,10 @@ class Container implements ContainerInterface
 
     /**
      * Creates a new copy of provided ClassName
+     *
+     * @param array<int,mixed> $params
+     * @throws ContainerExceptionInterface - On re-add.
+     * @throws ContainerExceptionInterface - On cercular dependency.
      */
     public function fresh(string $className, array $params = []): void
     {
@@ -124,6 +130,10 @@ class Container implements ContainerInterface
 
     /**
      * Creates a shared instance by provided Key (not class name)
+     *
+     * @param array<int,mixed> $params
+     * @throws ContainerExceptionInterface - On re-add.
+     * @throws ContainerExceptionInterface - On cercular dependency.
      */
     public function multi(
         string $className,
@@ -157,9 +167,10 @@ class Container implements ContainerInterface
     /**
      * Notices a dependency to check in future before `get` call
      *
+     * @param array<int, mixed> $params
      * @throws ContainerExceptionInterface - On cercular dependency.
      * */
-    protected function promise(callable $key, $params): void
+    protected function promise(callable $key, array $params): void
     {
         $list = [];
         foreach ($params as $param) {
@@ -170,7 +181,7 @@ class Container implements ContainerInterface
                     $param->keyAsString(),
                     $list
                 );
-                array_merge($list, $result);
+                $list             = array_merge($list, $result);
             }
         }
     }
@@ -178,7 +189,9 @@ class Container implements ContainerInterface
     /**
      * Cercular check
      *
+     * @param array<int,string> $checked
      * @throws ContainerExceptionInterface - On cercular dependency.
+     * @return array<int,string>
      * */
     protected function checkDependency(
         string $target,
