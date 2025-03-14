@@ -211,19 +211,20 @@ class ContainerTest extends TestCase
     }
 
     /** MULTI */
-    // public function testMultiReAdd(): void
-    // {
-    //     $container = new Container();
-    //     $container->multi(
-    //         '\Romchik38\Tests\Unit\Classes\Primitive1',
-    //         'key1',
-    //         true,
-    //         [1]
-    //     );
+    public function testMultiReAdd(): void
+    {
+        $container = new Container();
+        $container->add('key1', 10);
 
-    //     $this->expectException(ContainerExceptionInterface::class);
-    //     $container->shared('\Romchik38\Tests\Unit\Classes\Primitive1');
-    // }
+        $this->expectException(ContainerExceptionInterface::class);
+
+        $container->multi(
+            '\Romchik38\Tests\Unit\Classes\Primitive1',
+            'key1',
+            true,
+            [1]
+        );
+    }
 
     public function testMultiPrimitive(): void
     {
@@ -287,5 +288,30 @@ class ContainerTest extends TestCase
         $this->assertSame('some_string_for_first', $mFirst->str);
         $this->assertSame(7, $mFirst->depPromitive1->numb);
         $this->assertSame(7, $mSecond->depPromitive1->numb);
+    }
+
+    public function testMultiWithCercular(): void
+    {
+        $container = new Container();
+
+        $container->multi(
+            '\Romchik38\Tests\Unit\Classes\Cercular1', 
+            'key.1',
+            true,
+            [
+                new Promise('\Romchik38\Tests\Unit\Classes\Cercular2')
+            ]
+        );
+
+        $this->expectException(ContainerExceptionInterface::class);
+
+        $container->multi(
+            '\Romchik38\Tests\Unit\Classes\Cercular2', 
+            'key.1',
+            true,
+            [
+                new Promise('\Romchik38\Tests\Unit\Classes\Cercular1')
+            ]
+        );
     }
 }

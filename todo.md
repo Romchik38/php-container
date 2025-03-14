@@ -1,8 +1,6 @@
 # Todo
 
-- tests
-  - container
-- phpstan
 - code standart
+- phpstan
 - readme
 - documentation
