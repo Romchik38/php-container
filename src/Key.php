@@ -6,6 +6,7 @@ namespace Romchik38\Container;
 
 use InvalidArgumentException;
 
+/** @internal */
 class Key
 {
     public function __construct(

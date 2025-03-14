@@ -210,21 +210,35 @@ class ContainerTest extends TestCase
         ]);
     }
 
-    /** @todo MULTI */
+    /** MULTI */
+    // public function testMultiReAdd(): void
+    // {
+    //     $container = new Container();
+    //     $container->multi(
+    //         '\Romchik38\Tests\Unit\Classes\Primitive1',
+    //         'key1',
+    //         true,
+    //         [1]
+    //     );
+
+    //     $this->expectException(ContainerExceptionInterface::class);
+    //     $container->shared('\Romchik38\Tests\Unit\Classes\Primitive1');
+    // }
+
     public function testMultiPrimitive(): void
     {
         $container = new Container();
 
         $container->multi(
             Primitive1::class,
-            new Key('one'),
+            'one',
             true,
             [1]
         );
         
         $container->multi(
             Primitive1::class,
-            new Key('seven'),
+            'seven',
             true,
             [7]
         );
@@ -243,7 +257,7 @@ class ContainerTest extends TestCase
 
         $container->multi(
             OnOtherClass2::class,
-            new Key('first'),
+            'first',
             true,
             [
                 'some_string_for_first',
@@ -254,7 +268,7 @@ class ContainerTest extends TestCase
         
         $container->multi(
             OnOtherClass2::class,
-            new Key('seconds'),
+            'seconds',
             true,
             [
                 'another_string_for_second',

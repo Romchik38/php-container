@@ -4,6 +4,7 @@ namespace Romchik38\Container;
 
 use Psr\Container\ContainerInterface;
 
+/** @internal */
 abstract class AbstractEntry implements EntryInterface
 {
     protected object|null $instance = null;

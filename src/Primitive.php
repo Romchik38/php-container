@@ -6,6 +6,7 @@ namespace Romchik38\Container;
 
 use Psr\Container\ContainerInterface;
 
+/** @internal */
 class Primitive implements EntryInterface
 {
     public function __construct(

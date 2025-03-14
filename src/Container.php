@@ -126,19 +126,20 @@ class Container implements ContainerInterface
      */
     public function multi(
         string $className,
-        Key $key,
+        string $key,
         bool $isShared = true,
         array $params = []
     ): void {
         $classNameVo = new ClassName($className);
+        $keyVo = new Key($key);
         // check on re-add
-        $this->chechReAdd($key());
+        $this->chechReAdd($keyVo());
 
         // check cercular and do promise
         $this->promise($classNameVo, $params);
 
         // create an instance
-        $this->containers[$key()] = new Multi($classNameVo, $params, $key, $isShared);
+        $this->containers[$keyVo()] = new Multi($classNameVo, $params, $keyVo, $isShared);
     }
 
     /** @throws ContainerExceptionInterface */

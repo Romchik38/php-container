@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Romchik38\Container;
 
+/** @internal */
 class Fresh extends AbstractEntry
 {
     /** @param array<int,mixed> $params */
