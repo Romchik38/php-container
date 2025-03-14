@@ -88,7 +88,9 @@ class Container implements ContainerInterface
     }
 
     /** 
-     * Creates a shared object of provided ClassName 
+     * Creates a shared object of provided ClassName
+     * 
+     * @throws ContainerExceptionInterface - On re-add.
      * */
     public function shared(string $className, array $params = []): void
     {
@@ -139,7 +141,7 @@ class Container implements ContainerInterface
         $this->containers[$key()] = new Multi($classNameVo, $params, $key, $isShared);
     }
 
-    /** @throws ContainerException */
+    /** @throws ContainerExceptionInterface */
     protected function chechReAdd(string $key): void
     {
         $isAdded = $this->containers[$key] ?? null;
@@ -150,7 +152,11 @@ class Container implements ContainerInterface
         }
     }
 
-    /** Notices a dependency to check in future before `get` call */
+    /** 
+     * Notices a dependency to check in future before `get` call 
+     * 
+     * @throws ContainerExceptionInterface - On cercular dependency.
+     * */
     protected function promise(callable $key, $params): void
     {
         $list = [];
@@ -167,7 +173,11 @@ class Container implements ContainerInterface
         }
     }
 
-    /** Cercular check */
+    /** 
+     * Cercular check 
+     * 
+     * @throws ContainerExceptionInterface - On cercular dependency.
+     * */
     protected function checkDependency(
         string $target, 
         string $candidate, 

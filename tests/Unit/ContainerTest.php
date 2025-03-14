@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Romchik38\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Romchik38\Container\Container;
 use Romchik38\Container\ContainerException;
@@ -64,7 +65,7 @@ class ContainerTest extends TestCase
             ]
         );
 
-        $this->expectException(ContainerException::class);
+        $this->expectException(ContainerExceptionInterface::class);
         $container->get('\Romchik38\Tests\Unit\Classes\OnOtherClass2');
     }
 
@@ -94,7 +95,16 @@ class ContainerTest extends TestCase
     }
 
     /** SHARED */
-    public function testShared(): void
+    public function testSharedReAdd(): void
+    {
+        $container = new Container();
+        $container->shared('\Romchik38\Tests\Unit\Classes\Primitive1');
+
+        $this->expectException(ContainerExceptionInterface::class);
+        $container->shared('\Romchik38\Tests\Unit\Classes\Primitive1');
+    }
+
+    public function testSharedWithoutPromise(): void
     {
         $container = new Container();
 
@@ -105,6 +115,41 @@ class ContainerTest extends TestCase
 
         $this->assertSame($sh1, $sh2);
         $this->assertSame($sh1->numb, $sh1->numb);
+    }
+
+    public function testSharedWithPromise(): void
+    {
+        $container = new Container();
+
+        $container->shared('\Romchik38\Tests\Unit\Classes\OnOtherClass2', [
+            'some_string_param',
+            new Promise('\Romchik38\Tests\Unit\Classes\Primitive1')
+        ]);
+
+        $container->shared('\Romchik38\Tests\Unit\Classes\Primitive1', [1]);
+
+        $sh1 = $container->get('\Romchik38\Tests\Unit\Classes\OnOtherClass2');
+        $sh2 = $container->get('\Romchik38\Tests\Unit\Classes\OnOtherClass2');
+
+        $this->assertSame($sh1, $sh2);
+        $this->assertSame($sh1->str, $sh1->str);
+        $this->assertSame($sh1->depPromitive1, $sh1->depPromitive1);
+        $this->assertSame($sh1->depPromitive1->numb, $sh1->depPromitive1->numb);
+    }
+
+    public function testSharedWithCercular(): void
+    {
+        $container = new Container();
+
+        $container->shared('\Romchik38\Tests\Unit\Classes\Cercular1', [
+            new Promise('\Romchik38\Tests\Unit\Classes\Cercular2')
+        ]);
+
+        $this->expectException(ContainerExceptionInterface::class);
+
+        $container->shared('\Romchik38\Tests\Unit\Classes\Cercular2', [
+            new Promise('\Romchik38\Tests\Unit\Classes\Cercular1')
+        ]);
     }
 
     /** FRESH */
