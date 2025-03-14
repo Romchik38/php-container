@@ -133,8 +133,8 @@ class ContainerTest extends TestCase
 
         $this->assertSame($sh1, $sh2);
         $this->assertSame($sh1->str, $sh1->str);
-        $this->assertSame($sh1->depPromitive1, $sh1->depPromitive1);
-        $this->assertSame($sh1->depPromitive1->numb, $sh1->depPromitive1->numb);
+        $this->assertSame($sh1->depPromitive1, $sh2->depPromitive1);
+        $this->assertSame($sh1->depPromitive1->numb, $sh2->depPromitive1->numb);
     }
 
     public function testSharedWithCercular(): void
@@ -153,6 +153,15 @@ class ContainerTest extends TestCase
     }
 
     /** FRESH */
+    public function testFreshReAdd(): void
+    {
+        $container = new Container();
+        $container->fresh('\Romchik38\Tests\Unit\Classes\Primitive1');
+
+        $this->expectException(ContainerExceptionInterface::class);
+        $container->fresh('\Romchik38\Tests\Unit\Classes\Primitive1');
+    }
+
     public function testFresh(): void
     {
         $container = new Container();
@@ -166,7 +175,42 @@ class ContainerTest extends TestCase
         $this->assertSame($sh1->numb, $sh1->numb);
     }
  
-    /** MULTI */
+    public function testFreshWithPromise(): void
+    {
+        $container = new Container();
+
+        $container->fresh('\Romchik38\Tests\Unit\Classes\OnOtherClass2', [
+            'some_string_param',
+            new Promise('\Romchik38\Tests\Unit\Classes\Primitive1')
+        ]);
+
+        $container->fresh('\Romchik38\Tests\Unit\Classes\Primitive1', [1]);
+
+        $sh1 = $container->get('\Romchik38\Tests\Unit\Classes\OnOtherClass2');
+        $sh2 = $container->get('\Romchik38\Tests\Unit\Classes\OnOtherClass2');
+
+        $this->assertNotSame($sh1, $sh2);
+        $this->assertSame($sh1->str, $sh1->str);
+        $this->assertNotSame($sh1->depPromitive1, $sh2->depPromitive1);
+        $this->assertSame($sh1->depPromitive1->numb, $sh2->depPromitive1->numb);
+    }
+    
+    public function testFreshWithCercular(): void
+    {
+        $container = new Container();
+
+        $container->fresh('\Romchik38\Tests\Unit\Classes\Cercular1', [
+            new Promise('\Romchik38\Tests\Unit\Classes\Cercular2')
+        ]);
+
+        $this->expectException(ContainerExceptionInterface::class);
+
+        $container->shared('\Romchik38\Tests\Unit\Classes\Cercular2', [
+            new Promise('\Romchik38\Tests\Unit\Classes\Cercular1')
+        ]);
+    }
+
+    /** @todo MULTI */
     public function testMultiPrimitive(): void
     {
         $container = new Container();
