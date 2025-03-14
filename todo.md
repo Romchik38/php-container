@@ -1,4 +1,3 @@
 # Todo
 
-- readme
-- documentation
+- make new v2.0.0
