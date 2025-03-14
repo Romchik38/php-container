@@ -19,7 +19,7 @@ class ContainerTest extends TestCase
     /** ADD */
     public function testAdd()
     {
-        $id = 'some id';
+        $id = 'some key';
         $value = 'some value';
         $container = new Container();
         $container->add($id, $value);
@@ -30,7 +30,7 @@ class ContainerTest extends TestCase
     /** GET */
     public function testGetString()
     {
-        $id = 'some id';
+        $id = 'some key';
         $value = 'some value';
         $container = new Container();
         $container->add($id, $value);
@@ -40,7 +40,7 @@ class ContainerTest extends TestCase
 
     public function testGetCallable()
     {
-        $id = 'some id';
+        $id = 'some key';
 
         $fn1 = function(string $value) {
             return $value;
@@ -73,6 +73,24 @@ class ContainerTest extends TestCase
         $container = new Container();
         $this->expectException(NotFoundExceptionInterface::class);
         $container->get('\Romchik38\Tests\Unit\Classes\OnOtherClass2');
+    }
+
+    /** HAS */
+    public function testHasWasAdded(): void
+    {
+        $id = 'some key';
+        $value = 'some value';
+        $container = new Container();
+        $container->add($id, $value);
+
+        $this->assertSame(true, $container->has('some key'));
+    }
+
+    public function testHasWasNotAdded(): void
+    {
+        $container = new Container();
+
+        $this->assertSame(false, $container->has('some key'));
     }
 
     /** SHARED */
