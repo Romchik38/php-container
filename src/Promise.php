@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Romchik38\Container;
 
-/** @api */
 final class Promise
 {
     private readonly Key $key;

@@ -12,7 +12,7 @@ class Primitive implements EntryInterface
     public function __construct(
         protected readonly Key $key,
         protected readonly mixed $value
-    ) {   
+    ) {
     }
 
     public function __invoke(ContainerInterface $container): mixed
@@ -20,7 +20,8 @@ class Primitive implements EntryInterface
         return $this->value;
     }
 
-    public function params(): array {
+    public function params(): array
+    {
         return [];
     }
 

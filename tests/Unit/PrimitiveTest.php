@@ -15,7 +15,7 @@ final class PrimitiveTest extends TestCase
     {
         $c = new Container();
         $p = new Primitive(new Key('some_key'), 1);
-        
+
         $this->assertSame(1, $p($c));
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Romchik38\Container;
 
 use Psr\Container\ContainerInterface;

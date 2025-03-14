@@ -8,20 +8,19 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Romchik38\Container\Container;
-use Romchik38\Container\ContainerException;
-use Romchik38\Container\Key;
-use Romchik38\Container\NotFoundException;
 use Romchik38\Container\Promise;
-use Romchik38\Tests\Unit\Classes\Primitive1;
+use Romchik38\Tests\Unit\Classes\Cercular1;
+use Romchik38\Tests\Unit\Classes\Cercular2;
 use Romchik38\Tests\Unit\Classes\OnOtherClass2;
+use Romchik38\Tests\Unit\Classes\Primitive1;
 
 class ContainerTest extends TestCase
 {
     /** ADD */
     public function testAdd()
     {
-        $id = 'some key';
-        $value = 'some value';
+        $id        = 'some key';
+        $value     = 'some value';
         $container = new Container();
         $container->add($id, $value);
 
@@ -31,8 +30,8 @@ class ContainerTest extends TestCase
     /** GET */
     public function testGetString()
     {
-        $id = 'some key';
-        $value = 'some value';
+        $id        = 'some key';
+        $value     = 'some value';
         $container = new Container();
         $container->add($id, $value);
 
@@ -43,13 +42,13 @@ class ContainerTest extends TestCase
     {
         $id = 'some key';
 
-        $fn1 = function(string $value) {
+        $fn1 = function (string $value) {
             return $value;
         };
 
         $container = new Container();
         $container->add('callback', $fn1);
-        
+
         $result = $container->get('callback');
         $this->assertSame($id, $result($id));
     }
@@ -58,29 +57,29 @@ class ContainerTest extends TestCase
     {
         $container = new Container();
         $container->shared(
-            '\Romchik38\Tests\Unit\Classes\OnOtherClass2',
+            OnOtherClass2::class,
             [
                 'some_str',
-                new Promise('numb.one')
+                new Promise('numb.one'),
             ]
         );
 
         $this->expectException(ContainerExceptionInterface::class);
-        $container->get('\Romchik38\Tests\Unit\Classes\OnOtherClass2');
+        $container->get(OnOtherClass2::class);
     }
 
     public function testGetNotFound(): void
     {
         $container = new Container();
         $this->expectException(NotFoundExceptionInterface::class);
-        $container->get('\Romchik38\Tests\Unit\Classes\OnOtherClass2');
+        $container->get(OnOtherClass2::class);
     }
 
     /** HAS */
     public function testHasWasAdded(): void
     {
-        $id = 'some key';
-        $value = 'some value';
+        $id        = 'some key';
+        $value     = 'some value';
         $container = new Container();
         $container->add($id, $value);
 
@@ -98,10 +97,10 @@ class ContainerTest extends TestCase
     public function testSharedReAdd(): void
     {
         $container = new Container();
-        $container->shared('\Romchik38\Tests\Unit\Classes\Primitive1');
+        $container->shared(Primitive1::class);
 
         $this->expectException(ContainerExceptionInterface::class);
-        $container->shared('\Romchik38\Tests\Unit\Classes\Primitive1');
+        $container->shared(Primitive1::class);
     }
 
     public function testSharedWithoutPromise(): void
@@ -109,7 +108,7 @@ class ContainerTest extends TestCase
         $container = new Container();
 
         $container->shared(Primitive1::class, [7]);
-        
+
         $sh1 = $container->get(Primitive1::class);
         $sh2 = $container->get(Primitive1::class);
 
@@ -121,15 +120,15 @@ class ContainerTest extends TestCase
     {
         $container = new Container();
 
-        $container->shared('\Romchik38\Tests\Unit\Classes\OnOtherClass2', [
+        $container->shared(OnOtherClass2::class, [
             'some_string_param',
-            new Promise('\Romchik38\Tests\Unit\Classes\Primitive1')
+            new Promise(Primitive1::class),
         ]);
 
-        $container->shared('\Romchik38\Tests\Unit\Classes\Primitive1', [1]);
+        $container->shared(Primitive1::class, [1]);
 
-        $sh1 = $container->get('\Romchik38\Tests\Unit\Classes\OnOtherClass2');
-        $sh2 = $container->get('\Romchik38\Tests\Unit\Classes\OnOtherClass2');
+        $sh1 = $container->get(OnOtherClass2::class);
+        $sh2 = $container->get(OnOtherClass2::class);
 
         $this->assertSame($sh1, $sh2);
         $this->assertSame($sh1->str, $sh1->str);
@@ -141,14 +140,14 @@ class ContainerTest extends TestCase
     {
         $container = new Container();
 
-        $container->shared('\Romchik38\Tests\Unit\Classes\Cercular1', [
-            new Promise('\Romchik38\Tests\Unit\Classes\Cercular2')
+        $container->shared(Cercular1::class, [
+            new Promise(Cercular2::class),
         ]);
 
         $this->expectException(ContainerExceptionInterface::class);
 
-        $container->shared('\Romchik38\Tests\Unit\Classes\Cercular2', [
-            new Promise('\Romchik38\Tests\Unit\Classes\Cercular1')
+        $container->shared(Cercular2::class, [
+            new Promise(Cercular1::class),
         ]);
     }
 
@@ -156,10 +155,10 @@ class ContainerTest extends TestCase
     public function testFreshReAdd(): void
     {
         $container = new Container();
-        $container->fresh('\Romchik38\Tests\Unit\Classes\Primitive1');
+        $container->fresh(Primitive1::class);
 
         $this->expectException(ContainerExceptionInterface::class);
-        $container->fresh('\Romchik38\Tests\Unit\Classes\Primitive1');
+        $container->fresh(Primitive1::class);
     }
 
     public function testFresh(): void
@@ -167,46 +166,46 @@ class ContainerTest extends TestCase
         $container = new Container();
 
         $container->fresh(Primitive1::class, [7]);
-        
+
         $sh1 = $container->get(Primitive1::class);
         $sh2 = $container->get(Primitive1::class);
 
         $this->assertNotSame($sh1, $sh2);
         $this->assertSame($sh1->numb, $sh1->numb);
     }
- 
+
     public function testFreshWithPromise(): void
     {
         $container = new Container();
 
-        $container->fresh('\Romchik38\Tests\Unit\Classes\OnOtherClass2', [
+        $container->fresh(OnOtherClass2::class, [
             'some_string_param',
-            new Promise('\Romchik38\Tests\Unit\Classes\Primitive1')
+            new Promise(Primitive1::class),
         ]);
 
-        $container->fresh('\Romchik38\Tests\Unit\Classes\Primitive1', [1]);
+        $container->fresh(Primitive1::class, [1]);
 
-        $sh1 = $container->get('\Romchik38\Tests\Unit\Classes\OnOtherClass2');
-        $sh2 = $container->get('\Romchik38\Tests\Unit\Classes\OnOtherClass2');
+        $sh1 = $container->get(OnOtherClass2::class);
+        $sh2 = $container->get(OnOtherClass2::class);
 
         $this->assertNotSame($sh1, $sh2);
         $this->assertSame($sh1->str, $sh1->str);
         $this->assertNotSame($sh1->depPromitive1, $sh2->depPromitive1);
         $this->assertSame($sh1->depPromitive1->numb, $sh2->depPromitive1->numb);
     }
-    
+
     public function testFreshWithCercular(): void
     {
         $container = new Container();
 
-        $container->fresh('\Romchik38\Tests\Unit\Classes\Cercular1', [
-            new Promise('\Romchik38\Tests\Unit\Classes\Cercular2')
+        $container->fresh(Cercular1::class, [
+            new Promise(Cercular2::class),
         ]);
 
         $this->expectException(ContainerExceptionInterface::class);
 
-        $container->shared('\Romchik38\Tests\Unit\Classes\Cercular2', [
-            new Promise('\Romchik38\Tests\Unit\Classes\Cercular1')
+        $container->shared(Cercular2::class, [
+            new Promise(Cercular1::class),
         ]);
     }
 
@@ -219,7 +218,7 @@ class ContainerTest extends TestCase
         $this->expectException(ContainerExceptionInterface::class);
 
         $container->multi(
-            '\Romchik38\Tests\Unit\Classes\Primitive1',
+            Primitive1::class,
             'key1',
             true,
             [1]
@@ -236,15 +235,15 @@ class ContainerTest extends TestCase
             true,
             [1]
         );
-        
+
         $container->multi(
             Primitive1::class,
             'seven',
             true,
             [7]
         );
-        
-        $mOne = $container->get('one');
+
+        $mOne   = $container->get('one');
         $mSeven = $container->get('seven');
 
         $this->assertNotSame($mOne, $mSeven);
@@ -262,25 +261,23 @@ class ContainerTest extends TestCase
             true,
             [
                 'some_string_for_first',
-                new Promise(Primitive1::class)
+                new Promise(Primitive1::class),
             ]
-            
         );
-        
+
         $container->multi(
             OnOtherClass2::class,
             'seconds',
             true,
             [
                 'another_string_for_second',
-                new Promise(Primitive1::class)
+                new Promise(Primitive1::class),
             ]
-            
         );
 
         $container->fresh(Primitive1::class, [7]);
-        
-        $mFirst = $container->get('first');
+
+        $mFirst  = $container->get('first');
         $mSecond = $container->get('seconds');
 
         $this->assertNotSame($mFirst, $mSecond);
@@ -295,22 +292,22 @@ class ContainerTest extends TestCase
         $container = new Container();
 
         $container->multi(
-            '\Romchik38\Tests\Unit\Classes\Cercular1', 
+            Cercular1::class,
             'key.1',
             true,
             [
-                new Promise('\Romchik38\Tests\Unit\Classes\Cercular2')
+                new Promise(Cercular2::class),
             ]
         );
 
         $this->expectException(ContainerExceptionInterface::class);
 
         $container->multi(
-            '\Romchik38\Tests\Unit\Classes\Cercular2', 
+            Cercular2::class,
             'key.1',
             true,
             [
-                new Promise('\Romchik38\Tests\Unit\Classes\Cercular1')
+                new Promise(Cercular1::class),
             ]
         );
     }

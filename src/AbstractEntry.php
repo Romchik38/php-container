@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Romchik38\Container;
 
 use Psr\Container\ContainerInterface;
@@ -11,7 +13,7 @@ abstract class AbstractEntry implements EntryInterface
 
     /** @param array<int,mixed> $params */
     public function __construct(
-        protected readonly ClassName $className, 
+        protected readonly ClassName $className,
         protected readonly array $params,
         protected readonly bool $isShared
     ) {
@@ -25,9 +27,9 @@ abstract class AbstractEntry implements EntryInterface
 
         $newParams = [];
 
-        foreach($this->params as $param) {
+        foreach ($this->params as $param) {
             if ($param instanceof Promise) {
-                $promised = $container->get($param->keyAsString());
+                $promised    = $container->get($param->keyAsString());
                 $newParams[] = $promised;
             } else {
                 $newParams[] = $param;
@@ -35,7 +37,7 @@ abstract class AbstractEntry implements EntryInterface
         }
 
         $classNameAsString = ($this->className)();
-        $instance = new $classNameAsString(...$newParams);
+        $instance          = new $classNameAsString(...$newParams);
         if ($this->isShared === true && $this->instance === null) {
             $this->instance = $instance;
         }

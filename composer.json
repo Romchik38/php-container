@@ -33,6 +33,8 @@
         }
     },
     "scripts": {
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
         "tests": [
             "vendor/bin/phpunit",
             "composer cs-check"

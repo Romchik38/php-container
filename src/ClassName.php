@@ -6,6 +6,9 @@ namespace Romchik38\Container;
 
 use InvalidArgumentException;
 
+use function class_exists;
+use function sprintf;
+
 /** @internal */
 final class ClassName
 {
@@ -13,7 +16,7 @@ final class ClassName
 
     public function __construct(string $className)
     {
-        if(class_exists($className)) {
+        if (class_exists($className)) {
             $this->className = $className;
         } else {
             throw new InvalidArgumentException(

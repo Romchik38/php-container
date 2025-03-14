@@ -9,13 +9,15 @@ use Romchik38\Container\AbstractEntry;
 use Romchik38\Container\ClassName;
 use Romchik38\Container\Container;
 use Romchik38\Container\Promise;
+use Romchik38\Tests\Unit\Classes\OnOtherClass2;
+use Romchik38\Tests\Unit\Classes\Primitive1;
 
 final class AbstractEntryTest extends TestCase
 {
     public function testParams(): void
     {
-        $className = new ClassName('\Romchik38\Tests\Unit\Classes\Primitive1');
-        $params = [1];
+        $className = new ClassName(Primitive1::class);
+        $params    = [1];
 
         $a = $this->create($className, $params, true);
 
@@ -25,11 +27,11 @@ final class AbstractEntryTest extends TestCase
     /** shared instance */
     public function testInvokeShared(): void
     {
-        $className = new ClassName('\Romchik38\Tests\Unit\Classes\Primitive1');
-        $params = [1];
+        $className = new ClassName(Primitive1::class);
+        $params    = [1];
 
         $a = $this->create($className, $params, true);
-        
+
         $c = new Container();
 
         $i1 = $a($c);
@@ -42,11 +44,11 @@ final class AbstractEntryTest extends TestCase
     /** fresh instance */
     public function testInvokeFresh(): void
     {
-        $className = new ClassName('\Romchik38\Tests\Unit\Classes\Primitive1');
-        $params = [1];
+        $className = new ClassName(Primitive1::class);
+        $params    = [1];
 
         $a = $this->create($className, $params, false);
-        
+
         $c = new Container();
 
         $i1 = $a($c);
@@ -58,14 +60,14 @@ final class AbstractEntryTest extends TestCase
 
     public function testInvokeWithPromise(): void
     {
-        $className = new ClassName('\Romchik38\Tests\Unit\Classes\OnOtherClass2');
-        $params = [
+        $className = new ClassName(OnOtherClass2::class);
+        $params    = [
             'some_string',
-            new Promise('\Romchik38\Tests\Unit\Classes\Primitive1')
+            new Promise(Primitive1::class),
         ];
 
         $c = new Container();
-        $c->shared('\Romchik38\Tests\Unit\Classes\Primitive1', [1]);
+        $c->shared(Primitive1::class, [1]);
 
         $a = $this->create($className, $params, true);
 
@@ -79,9 +81,8 @@ final class AbstractEntryTest extends TestCase
         ClassName $className,
         array $params,
         bool $isShared
-    ): AbstractEntry
-    {
-        return new class(
+    ): AbstractEntry {
+        return new class (
             $className,
             $params,
             $isShared
@@ -90,7 +91,7 @@ final class AbstractEntryTest extends TestCase
             public function key(): string
             {
                 return 'some_key';
-            }            
+            }
         };
     }
 }

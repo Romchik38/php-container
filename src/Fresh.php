@@ -9,7 +9,7 @@ class Fresh extends AbstractEntry
 {
     /** @param array<int,mixed> $params */
     public function __construct(
-        ClassName $className, 
+        ClassName $className,
         array $params
     ) {
         parent::__construct($className, $params, false);

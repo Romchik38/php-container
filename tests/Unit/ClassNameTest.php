@@ -20,7 +20,7 @@ final class ClassNameTest extends TestCase
     public function testConstruct(): void
     {
         $someClass = new stdClass();
-        $cl = new ClassName($someClass::class);
+        $cl        = new ClassName($someClass::class);
         $this->assertSame($someClass::class, $cl->className);
     }
 }

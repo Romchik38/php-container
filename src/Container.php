@@ -1,65 +1,67 @@
-<?php 
+<?php
 
 declare(strict_types=1);
 
 /**
  * Implemetation of psr-11 container
- * 
+ *
  * Php version 8.3
- * 
- * @category Psr-11
- * @package  Container
- * @author   Romchik38 <pomahehko.c@gmail.com>
- * @license  MIT https://opensource.org/license/mit/
+ *
  * @link     no link
  */
 
 namespace Romchik38\Container;
 
-use Psr\Container\ContainerInterface;
 use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
+use function array_key_exists;
+use function array_merge;
+use function count;
+use function implode;
+use function sprintf;
 
 /**
  * Implemetation of psr-11 container
+ *
  * @throws ContainerExceptionInterface
  */
 class Container implements ContainerInterface
 {
-    /** 
-     * Ready to use containers 
-     * 
+    /**
+     * Ready to use containers
+     *
      * @var array<string,EntryInterface>
      * */
     protected array $containers = [];
 
-    /** 
+    /**
      * Promised entries
-     * 
-     * @var array<int, Promise> 
+     *
+     * @var array<int, Promise>
      * */
     protected array $promised = [];
 
-    /** 
-     * Adds a mixed value "as is" into the container. 
+    /**
+     * Adds a mixed value "as is" into the container.
      * */
     public function add(string $key, mixed $value): void
     {
         $this->containers[$key] = new Primitive(new Key($key), $value);
     }
 
-    /** 
+    /**
      * @throws NotFoundExceptionInterface
      * @throws ContainerExceptionInterface
      */
     public function get(string $key): mixed
     {
         // promise ready check
-        if(count($this->promised) > 0) {
-            foreach($this->promised as $promise) {
+        if (count($this->promised) > 0) {
+            foreach ($this->promised as $promise) {
                 $promisedClass = $promise->keyAsString();
-                $checkPromise = $this->containers[$promisedClass] ?? null;
+                $checkPromise  = $this->containers[$promisedClass] ?? null;
                 if ($checkPromise === null) {
                     throw new ContainerException(
                         sprintf('Class %s was promised, but not configured', $promisedClass)
@@ -68,7 +70,6 @@ class Container implements ContainerInterface
             }
             $this->promised = [];
         }
-
 
         $result = $this->has($key);
 
@@ -87,9 +88,9 @@ class Container implements ContainerInterface
         return array_key_exists($key, $this->containers);
     }
 
-    /** 
+    /**
      * Creates a shared object of provided ClassName
-     * 
+     *
      * @throws ContainerExceptionInterface - On re-add.
      * */
     public function shared(string $className, array $params = []): void
@@ -105,7 +106,7 @@ class Container implements ContainerInterface
         $this->containers[$className] = new Shared($classNameVo, $params);
     }
 
-    /** 
+    /**
      * Creates a new copy of provided ClassName
      */
     public function fresh(string $className, array $params = []): void
@@ -131,7 +132,7 @@ class Container implements ContainerInterface
         array $params = []
     ): void {
         $classNameVo = new ClassName($className);
-        $keyVo = new Key($key);
+        $keyVo       = new Key($key);
         // check on re-add
         $this->chechReAdd($keyVo());
 
@@ -146,27 +147,27 @@ class Container implements ContainerInterface
     protected function chechReAdd(string $key): void
     {
         $isAdded = $this->containers[$key] ?? null;
-        if($isAdded !== null) {
+        if ($isAdded !== null) {
             throw new ContainerException(
                 sprintf('Container key %s was already added', $key)
             );
         }
     }
 
-    /** 
-     * Notices a dependency to check in future before `get` call 
-     * 
+    /**
+     * Notices a dependency to check in future before `get` call
+     *
      * @throws ContainerExceptionInterface - On cercular dependency.
      * */
     protected function promise(callable $key, $params): void
     {
         $list = [];
-        foreach($params as $param) {
+        foreach ($params as $param) {
             if ($param instanceof Promise) {
                 $this->promised[] = $param;
-                $result = $this->checkDependency(
-                    $key(), 
-                    $param->keyAsString(), 
+                $result           = $this->checkDependency(
+                    $key(),
+                    $param->keyAsString(),
                     $list
                 );
                 array_merge($list, $result);
@@ -174,14 +175,14 @@ class Container implements ContainerInterface
         }
     }
 
-    /** 
-     * Cercular check 
-     * 
+    /**
+     * Cercular check
+     *
      * @throws ContainerExceptionInterface - On cercular dependency.
      * */
     protected function checkDependency(
-        string $target, 
-        string $candidate, 
+        string $target,
+        string $candidate,
         array $checked
     ): array {
         if ($target === $candidate) {
@@ -191,20 +192,20 @@ class Container implements ContainerInterface
                 implode(', ', $checked)
             ));
         }
-    
+
         $candidateInstance = $this->containers[$candidate] ?? null;
         if ($candidateInstance === null) {
             return $checked;
         }
-    
+
         $checked[] = $candidate;
-    
-        foreach($candidateInstance->params() as $candidateDep) {
+
+        foreach ($candidateInstance->params() as $candidateDep) {
             if ($candidateDep instanceof Promise) {
                 $checked = $this->checkDependency($target, $candidateDep->keyAsString(), $checked);
             }
         }
-    
+
         return $checked;
     }
 }
