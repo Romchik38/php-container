@@ -27,14 +27,14 @@ v2.0.0
 
 ### Primitive
 
-`Primitive` class is responsible to hold a static `mixed` value. Use method `add` to sore it.
+`Primitive` class is responsible to hold a static `mixed` value. Use method `add` to store it.
 
 ```php
 $container = new \Romchik38\Container\Container();
 $container->add('some key', 'any string');
 $container->add('config', ['key' => 0]);
-$container->add('important_object', new ImposrtantClass());
-// somehere in the code
+$container->add('important_object', new ImportantClass());
+// somewhere in the code
 $str = $container->get('some key');
 // ...etc
 ```
@@ -71,7 +71,7 @@ $fresh2 = $container->get('\Classes\Primitive1');
 
 ### Multi
 
-`Multi` class is responsible to create a new (or shared) copy of a concrete class with given *key*. It maght be usefull when dealing with interfaces or creating a few same classes with different configuration. Use method `multi`.
+`Multi` class is responsible to create a new (or shared) copy of a concrete class with a given *key*. It maght be usefull when dealing with interfaces or creating a few same classes with different configuration. Use method `multi`.
 
 ```php
 // Interface example
