@@ -15,6 +15,10 @@ Main features:
 - *promises* - container creates an instance only on a `get` call, to avoid unused creations.
 - can detect a circular dependency
 
+## Latest version
+
+v2.0.0
+
 ## Install
 
 `composer install romchik38/php-container`
