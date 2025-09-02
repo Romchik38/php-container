@@ -12,6 +12,7 @@ Main features:
 - creates a *shared* object (singleton).
 - creates a *fresh* copy of the same class on each call.
 - *multi* ability to create a different instance of the same class by provided keys.
+- *link* a key to another key
 - *promises* - container creates an instance only on a `get` call, to avoid unused creations.
 - can detect a circular dependency
 
@@ -84,6 +85,19 @@ $container->multi(
 );
 
 $database = $container->get('\DatabaseInterface');
+```
+
+### Link
+
+`Link` class helps to connect one key with another key. Use method `link` to store it. You can also make a reference to the class. This can be useful when using Interfaces.
+
+```php
+$container = new \Romchik38\Container\Container();
+$container->add('some key', 'any string');
+$container->link('another key', 'some key');
+// somewhere in the code
+$str = $container->get('another key');
+// $str holds 'any string'
 ```
 
 ## Promises
