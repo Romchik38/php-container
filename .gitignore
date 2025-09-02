@@ -1,2 +1,4 @@
 vendor/
 temp/
+.phpunit.result.cache
+.phpcs-cache
