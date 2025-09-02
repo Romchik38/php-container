@@ -4,6 +4,10 @@
 - [!] breaking changes  
 - [f] fix
 
+## 2.0.1
+
+- [n] Added new `link` function - link a key with another key or class name
+
 ## 2.0.0
 
 - [n] added method `shared` to create shared objects

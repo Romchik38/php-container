@@ -89,6 +89,17 @@ class Container implements ContainerInterface
     }
 
     /**
+     * Links a key with another key.
+     * */
+    public function link(string $key, string $promisedKey): void
+    {
+        // add to Promise
+        $promise                = new Promise($promisedKey);
+        $this->promised[]       = $promise;
+        $this->containers[$key] = new Link(new Key($key), $promise);
+    }
+
+    /**
      * Creates a shared object of provided ClassName
      *
      * @param array<int,mixed> $params
