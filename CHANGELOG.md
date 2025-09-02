@@ -4,6 +4,10 @@
 - [!] breaking changes  
 - [f] fix
 
+## 2.0.2
+
+- [n] Readme updated with new `link` function info.
+
 ## 2.0.1
 
 - [n] Added new `link` function - link a key with another key or class name

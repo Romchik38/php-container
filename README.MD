@@ -18,7 +18,7 @@ Main features:
 
 ## Latest version
 
-v2.0.0
+see [changelog](./CHANGELOG.md)
 
 ## Install
 
