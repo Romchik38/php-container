@@ -311,4 +311,17 @@ class ContainerTest extends TestCase
             ]
         );
     }
+
+    /** Replace Primitive */
+    public function testAddReplace()
+    {
+        $id        = 'some key';
+        $value     = 'some value';
+        $value2    = 'some value2';
+        $container = new Container();
+        $container->add($id, $value);
+        $container->add($id, $value2);
+
+        $this->assertSame($value2, $container->get($id));
+    }
 }
