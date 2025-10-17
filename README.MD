@@ -147,6 +147,18 @@ $container->shared(
 // Exception there
 ```
 
+## Data Replacement
+
+Currently, it is only possible to override data for `Primitives` that are added with the `add` method. An attempt to replace data using other methods will throws an error `ContainerException`.
+
+```php
+$id        = 'key';
+$container = new Container();
+$container->add($id, 'value');
+$container->add($id, 'value2');
+$value = $container->get($id);  // value2
+```
+
 ## Code quality
 
 - phpstan level 8
