@@ -164,10 +164,10 @@ $value = $container->get($id);  // value2
 - phpstan level 8
   - ![passes](https://placehold.co/15x15/0dbc79/0dbc79.png)`[OK] No errors`  
 - phpunit
-  - ![passes](https://placehold.co/15x15/0dbc79/0dbc79.png)`OK (36 tests, 54 assertions)`
+  - ![passes](https://placehold.co/15x15/0dbc79/0dbc79.png)`OK (40 tests, 59 assertions)`
   - tested partially
 - laminas-coding-standard
-  - ![passes](https://placehold.co/15x15/0dbc79/0dbc79.png)`32 / 32 (100%)`
+  - ![passes](https://placehold.co/15x15/0dbc79/0dbc79.png)`34 / 34 (100%)`
 
 ## Projects that use this product
 
