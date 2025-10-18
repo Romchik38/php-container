@@ -168,3 +168,22 @@ $value = $container->get($id);  // value2
   - tested partially
 - laminas-coding-standard
   - ![passes](https://placehold.co/15x15/0dbc79/0dbc79.png)`32 / 32 (100%)`
+
+## Projects that use this product
+
+The PHP container was used to build the `bootstrap system` in the following projects:
+
+- Site1
+- Site2
+
+## Site1
+
+Site1 is a simple website — that demonstrates a multi-page site with a login system, a sitemap, Google reCAPTCHA, and email-based password recovery. See source code on [github page](https://github.com/Romchik38/site1).
+
+Also available [Live Site1 preview](https://site1.romanenko-studio.dev/).
+
+## Site2
+
+Site2 is a more complex version of the site1 with more functionality. It demonstrates a multilanguage system, twig view, Image Converter and other features. See source code on [github page](https://github.com/Romchik38/site2).
+
+Also available [Live Site2 preview](https://site2.romanenko-studio.dev/en/about-this-site).
