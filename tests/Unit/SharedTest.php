@@ -15,7 +15,8 @@ final class SharedTest extends TestCase
     {
         $s = new Shared(
             new ClassName(Primitive1::class),
-            []
+            [],
+            false
         );
 
         $this->assertSame(Primitive1::class, $s->key());

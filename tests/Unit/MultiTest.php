@@ -18,7 +18,8 @@ final class MultiTest extends TestCase
             new ClassName(Primitive1::class),
             [],
             new Key('some_class'),
-            true
+            true,
+            false
         );
 
         $this->assertSame('some_class', $m->key());

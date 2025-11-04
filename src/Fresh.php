@@ -10,9 +10,10 @@ class Fresh extends AbstractEntry
     /** @param array<int,mixed> $params */
     public function __construct(
         ClassName $className,
-        array $params
+        array $params,
+        bool $isLazy
     ) {
-        parent::__construct($className, $params, false);
+        parent::__construct($className, $params, false, $isLazy);
     }
 
     public function key(): string

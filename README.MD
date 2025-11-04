@@ -15,6 +15,7 @@ Main features:
 - *link* a key to another key
 - *promises* - container creates an instance only on a `get` call, to avoid unused creations.
 - can detect a circular dependency
+- can be in *lazy mode*
 
 ## Latest version
 
@@ -153,10 +154,23 @@ Currently, it is only possible to override data for `Primitives` that are added 
 
 ```php
 $id        = 'key';
-$container = new Container();
+$container = new \Romchik38\Container\Container();
 $container->add($id, 'value');
 $container->add($id, 'value2');
 $value = $container->get($id);  // value2
+```
+
+## Lazy mode
+
+```php
+$container = new \Romchik38\Container\Container(true);
+$container->shared('\Classes\Primitive1', [7]);
+
+// $shared1 is not initialized
+$shared1 = $container->get('\Classes\Primitive1');
+
+// $shared is initialized, because access on property numb which holds 7
+$shared1->numb;
 ```
 
 ## Code quality

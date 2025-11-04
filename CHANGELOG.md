@@ -4,6 +4,13 @@
 - [!] breaking changes  
 - [f] fix
 
+## 2.0.3
+
+- [n] Container works with Lazy objects
+  - `Container` method `__construct` takes bool `true` to create objects as lazy.
+  - By default container is not lazy
+  - In lazy mode all `shared`, `multi` and `fresh` objects will be created as `lazy` (not initialized).
+
 ## 2.0.2
 
 - [n] Readme updated with new `link` function info.

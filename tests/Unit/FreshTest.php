@@ -19,7 +19,8 @@ final class FreshTest extends TestCase
         $container = new Container();
         $fr        = new Fresh(
             new ClassName(Primitive1::class),
-            [1]
+            [1],
+            false
         );
 
         $nd = $fr->__invoke($container);
@@ -35,6 +36,7 @@ final class FreshTest extends TestCase
                 'some_string',
                 new Promise(Primitive1::class),
             ],
+            false
         );
 
         $container->shared(Primitive1::class, [1]);

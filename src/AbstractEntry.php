@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Romchik38\Container;
 
 use Psr\Container\ContainerInterface;
+use ReflectionClass;
 
 /** @internal */
 abstract class AbstractEntry implements EntryInterface
@@ -15,7 +16,8 @@ abstract class AbstractEntry implements EntryInterface
     public function __construct(
         protected readonly ClassName $className,
         protected readonly array $params,
-        protected readonly bool $isShared
+        protected readonly bool $isShared,
+        protected readonly bool $isLazy
     ) {
     }
 
@@ -37,7 +39,16 @@ abstract class AbstractEntry implements EntryInterface
         }
 
         $classNameAsString = ($this->className)();
-        $instance          = new $classNameAsString(...$newParams);
+        if (! $this->isLazy) {
+            $instance = new $classNameAsString(...$newParams);
+        } else {
+            /* @phpstan-ignore argument.type */
+            $instance = (new ReflectionClass($classNameAsString))->newLazyGhost(
+                /* @phpstan-ignore method.notFound */
+                fn($object) => $object->__construct(...$newParams)
+            );
+        }
+
         if ($this->isShared === true && $this->instance === null) {
             $this->instance = $instance;
         }

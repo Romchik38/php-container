@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Romchik38\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Romchik38\Container\AbstractEntry;
 use Romchik38\Container\ClassName;
 use Romchik38\Container\Container;
@@ -77,15 +78,36 @@ final class AbstractEntryTest extends TestCase
         $this->assertSame(1, $i1->depPromitive1->numb);
     }
 
+    public function testLazyAsShared(): void
+    {
+        $className = new ClassName(Primitive1::class);
+        $params    = [1];
+
+        $a = $this->create($className, $params, true, true);
+
+        $c = new Container(true);
+
+        $i1 = $a($c);
+
+        $reflectionClass = new ReflectionClass(Primitive1::class);
+
+        $this->assertTrue($reflectionClass->isUninitializedLazyObject($i1));
+        $this->assertSame(1, $i1->numb);
+        $this->assertFalse($reflectionClass->isUninitializedLazyObject($i1));
+    }
+
+    /** Not Lazy */
     protected function create(
         ClassName $className,
         array $params,
-        bool $isShared
+        bool $isShared,
+        bool $isLazy = false
     ): AbstractEntry {
         return new class (
             $className,
             $params,
-            $isShared
+            $isShared,
+            $isLazy
         ) extends AbstractEntry
         {
             public function key(): string

@@ -10,9 +10,10 @@ class Shared extends AbstractEntry
     /** @param array<int,mixed> $params */
     public function __construct(
         ClassName $className,
-        array $params
+        array $params,
+        bool $isLazy
     ) {
-        parent::__construct($className, $params, true);
+        parent::__construct($className, $params, true, $isLazy);
     }
 
     public function key(): string

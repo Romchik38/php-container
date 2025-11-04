@@ -121,7 +121,7 @@ class Container implements ContainerInterface
         $this->promise($classNameVo, $params);
 
         // create an instance
-        $this->containers[$className] = new Shared($classNameVo, $params);
+        $this->containers[$className] = new Shared($classNameVo, $params, $this->isLazy);
     }
 
     /**
@@ -141,7 +141,7 @@ class Container implements ContainerInterface
         $this->promise($classNameVo, $params);
 
         // create an instance
-        $this->containers[$className] = new Fresh($classNameVo, $params);
+        $this->containers[$className] = new Fresh($classNameVo, $params, $this->isLazy);
     }
 
     /**
@@ -166,7 +166,13 @@ class Container implements ContainerInterface
         $this->promise($classNameVo, $params);
 
         // create an instance
-        $this->containers[$keyVo()] = new Multi($classNameVo, $params, $keyVo, $isShared);
+        $this->containers[$keyVo()] = new Multi(
+            $classNameVo,
+            $params,
+            $keyVo,
+            $isShared,
+            $this->isLazy
+        );
     }
 
     /** @throws ContainerExceptionInterface */

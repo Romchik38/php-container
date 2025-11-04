@@ -12,9 +12,10 @@ class Multi extends AbstractEntry
         ClassName $className,
         array $params,
         protected readonly Key $key,
-        bool $isShared
+        bool $isShared,
+        bool $isLazy
     ) {
-        parent::__construct($className, $params, $isShared);
+        parent::__construct($className, $params, $isShared, $isLazy);
     }
 
     public function key(): string
