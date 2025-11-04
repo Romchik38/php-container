@@ -51,6 +51,11 @@ class Container implements ContainerInterface
         $this->containers[$key] = new Primitive(new Key($key), $value);
     }
 
+    public function __construct(
+        public readonly bool $isLazy = false
+    ) {
+    }
+
     /**
      * @throws NotFoundExceptionInterface
      * @throws ContainerExceptionInterface

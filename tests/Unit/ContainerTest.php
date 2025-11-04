@@ -324,4 +324,18 @@ class ContainerTest extends TestCase
 
         $this->assertSame($value2, $container->get($id));
     }
+
+    public function testContainerIsNotLazyByDefault(): void
+    {
+        $c = new Container();
+
+        $this->assertFalse($c->isLazy);
+    }
+
+    public function testContainerCanBeLazy(): void
+    {
+        $c = new Container(true);
+
+        $this->assertTrue($c->isLazy);
+    }
 }
