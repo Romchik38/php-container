@@ -43,9 +43,14 @@ abstract class AbstractEntry implements EntryInterface
             $instance = new $classNameAsString(...$newParams);
         } else {
             /* @phpstan-ignore argument.type */
-            $instance = (new ReflectionClass($classNameAsString))->newLazyGhost(
-                /* @phpstan-ignore method.notFound */
-                fn($object) => $object->__construct(...$newParams)
+            $reflectionClass = new ReflectionClass($classNameAsString);
+            $instance        = ($reflectionClass)->newLazyGhost(
+                function ($object) use ($reflectionClass, $newParams) {
+                    if ($reflectionClass->hasMethod('__construct')) {
+                        /** @phpstan-ignore method.notFound */
+                        $object->__construct(...$newParams);
+                    }
+                }
             );
         }
 

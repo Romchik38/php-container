@@ -4,6 +4,10 @@
 - [!] breaking changes  
 - [f] fix
 
+## 2.0.4
+
+- [f] `Container` lazy - can instantiate lazy object which doesn't have `__construct`
+
 ## 2.0.3
 
 - [n] Container works with Lazy objects

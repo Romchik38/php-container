@@ -10,6 +10,8 @@ use Romchik38\Container\AbstractEntry;
 use Romchik38\Container\ClassName;
 use Romchik38\Container\Container;
 use Romchik38\Container\Promise;
+use Romchik38\Tests\Unit\Classes\NoDep2;
+use Romchik38\Tests\Unit\Classes\NoDep4;
 use Romchik38\Tests\Unit\Classes\OnOtherClass2;
 use Romchik38\Tests\Unit\Classes\Primitive1;
 
@@ -78,7 +80,7 @@ final class AbstractEntryTest extends TestCase
         $this->assertSame(1, $i1->depPromitive1->numb);
     }
 
-    public function testLazyAsShared(): void
+    public function testLazyAsSharedWithDep(): void
     {
         $className = new ClassName(Primitive1::class);
         $params    = [1];
@@ -90,6 +92,42 @@ final class AbstractEntryTest extends TestCase
         $i1 = $a($c);
 
         $reflectionClass = new ReflectionClass(Primitive1::class);
+
+        $this->assertTrue($reflectionClass->isUninitializedLazyObject($i1));
+        $this->assertSame(1, $i1->numb);
+        $this->assertFalse($reflectionClass->isUninitializedLazyObject($i1));
+    }
+
+    public function testLazyAsSharedWithoutDepNoConstruct(): void
+    {
+        $className = new ClassName(NoDep2::class);
+        $params    = [];
+
+        $a = $this->create($className, $params, true, true);
+
+        $c = new Container(true);
+
+        $i1 = $a($c);
+
+        $reflectionClass = new ReflectionClass(NoDep2::class);
+
+        $this->assertTrue($reflectionClass->isUninitializedLazyObject($i1));
+        $this->assertSame(1, $i1->numb);
+        $this->assertFalse($reflectionClass->isUninitializedLazyObject($i1));
+    }
+
+    public function testLazyAsSharedWithoutDepWithConstruct(): void
+    {
+        $className = new ClassName(NoDep4::class);
+        $params    = [];
+
+        $a = $this->create($className, $params, true, true);
+
+        $c = new Container(true);
+
+        $i1 = $a($c);
+
+        $reflectionClass = new ReflectionClass(NoDep4::class);
 
         $this->assertTrue($reflectionClass->isUninitializedLazyObject($i1));
         $this->assertSame(1, $i1->numb);
